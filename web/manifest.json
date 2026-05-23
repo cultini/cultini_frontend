@@ -1,11 +1,11 @@
 {
-    "name": "help_app",
-    "short_name": "help_app",
+    "name": "cultini",
+    "short_name": "cultini",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Cultini — a platform connecting people who need help with those who can give it.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

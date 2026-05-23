@@ -1,5 +1,5 @@
-name: help_app
-description: "a platform for help f"
+name: cultini
+description: "Cultini — a platform connecting people who need help with those who can give it."
 publish_to: 'none'
 
 version: 1.0.0
@@ -46,6 +46,15 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  image_path: "assets/images/logo.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
 
 flutter:
 

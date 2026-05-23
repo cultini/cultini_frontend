@@ -4,8 +4,8 @@ class AppStrings {
   AppStrings._();
 
   // ── App ─────────────────────────────────────────────────────────────────────
-  static const String appName = 'Amawal';
-  static const String appTagline = 'Apprendre le Kabyle';
+  static const String appName = 'Cultini';
+  static const String appTagline = 'Apprendre la culture berbère';
   static const String tifinagh = 'Langue Kabyle';
 
   // ── Auth ─────────────────────────────────────────────────────────────────────
@@ -38,7 +38,7 @@ class AppStrings {
   static const String timeEst = 'Temps';
 
   // ── Chat ─────────────────────────────────────────────────────────────────────
-  static const String chatTitle = 'Amawal AI';
+  static const String chatTitle = 'Cultini AI';
   static const String chatPlaceholder = 'Écrivez un message…';
   static const String chatWelcome =
       "Bienvenue ! Je suis votre assistant Kabyle. Comment puis-je vous aider aujourd'hui ?";
