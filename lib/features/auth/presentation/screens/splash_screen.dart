@@ -62,20 +62,16 @@ class _SplashScreenState extends State<SplashScreen>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 120,
+                  height: 120,
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.accent,
+                    color: AppColors.textLight,
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'âµ£',
-                    style: GoogleFonts.poppins(
-                      fontSize: 48,
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
                 const SizedBox(height: 24),

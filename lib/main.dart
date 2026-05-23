@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp.router(
+        title: 'cultini',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         routerConfig: appRouter,

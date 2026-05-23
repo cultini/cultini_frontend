@@ -3,10 +3,10 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:help_app/core/validators/validators.dart';
-import 'package:help_app/features/chat/data/models/chat_metrics_model.dart';
-import 'package:help_app/features/docs/domain/entities/doc_entry_entity.dart';
-import 'package:help_app/features/docs/presentation/bloc/docs_cubit.dart';
+import 'package:cultini/core/validators/validators.dart';
+import 'package:cultini/features/chat/data/models/chat_metrics_model.dart';
+import 'package:cultini/features/docs/domain/entities/doc_entry_entity.dart';
+import 'package:cultini/features/docs/presentation/bloc/docs_cubit.dart';
 
 DocEntryEntity _entry({
   required String id,
