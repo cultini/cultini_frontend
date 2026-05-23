@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/azetta_motif.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/feature_ui_config.dart';
 import '../../../core/extensions/snackbar_extensions.dart';
@@ -76,15 +77,15 @@ class _ChatViewState extends State<_ChatView> {
           children: [
             Text(
               AppStrings.chatTitle,
-              style: GoogleFonts.poppins(
-                fontSize: 15,
+              style: GoogleFonts.fraunces(
+                fontSize: 17,
                 fontWeight: FontWeight.w700,
                 color: AppColors.primary,
               ),
             ),
             Text(
               'Assistant culturel amazigh',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.hankenGrotesk(
                 fontSize: 11,
                 color: AppColors.textSecondary,
               ),
@@ -107,7 +108,8 @@ class _ChatViewState extends State<_ChatView> {
               Expanded(
                 child: Container(
                   color: AppColors.surfaceVariant,
-                  child: state.messages.isEmpty && !state.isLoading
+                  child: AzettaBackground(
+                    child: state.messages.isEmpty && !state.isLoading
                       ? const _EmptyState()
                       : ListView.builder(
                           controller: _scrollCtrl,
@@ -123,6 +125,7 @@ class _ChatViewState extends State<_ChatView> {
                             return MessageBubble(message: state.messages[index]);
                           },
                         ),
+                  ),
                 ),
               ),
               Container(
@@ -156,12 +159,12 @@ class _EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.auto_awesome, size: 40, color: AppColors.primary),
+            const Icon(Icons.auto_awesome, size: 40, color: AppColors.indigo),
             const SizedBox(height: 12),
             Text(
               AppStrings.chatWelcome,
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.hankenGrotesk(
                 fontSize: 13,
                 color: AppColors.textSecondary,
                 height: 1.5,
@@ -186,7 +189,7 @@ class _TypingIndicator extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: const BoxDecoration(
-              color: AppColors.primary,
+              color: AppColors.indigo,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
@@ -198,10 +201,11 @@ class _TypingIndicator extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.chatBubbleAI,
+              border: Border.all(color: AppColors.divider),
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(18),
-                topRight: Radius.circular(18),
-                bottomRight: Radius.circular(18),
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+                bottomRight: Radius.circular(16),
                 bottomLeft: Radius.circular(4),
               ),
             ),
@@ -248,7 +252,7 @@ class _InputBar extends StatelessWidget {
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
                 color: AppColors.surfaceVariant,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.divider),
               ),
               child: TextField(
@@ -257,13 +261,13 @@ class _InputBar extends StatelessWidget {
                 maxLines: null,
                 textInputAction: TextInputAction.send,
                 onSubmitted: onSend,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.hankenGrotesk(
                   fontSize: 14,
                   color: AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   hintText: AppStrings.chatPlaceholder,
-                  hintStyle: GoogleFonts.poppins(
+                  hintStyle: GoogleFonts.hankenGrotesk(
                     fontSize: 14,
                     color: AppColors.textMuted,
                   ),

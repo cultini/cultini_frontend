@@ -26,6 +26,16 @@ abstract class AppColors {
   static const Color chatBubbleAI = AppThemeColors.chatBubbleAI;
   static const Color chatBubbleUser = AppThemeColors.chatBubbleUser;
 
+  // Deep indigo + geometric motif tint.
+  static const Color indigo = AppThemeColors.indigo;
+  static const Color indigoLight = AppThemeColors.indigoLight;
+  static const Color motif = AppThemeColors.motif;
+
+  // Fiabilité chip tones (documentee / partielle / a_verifier).
+  static const Color fiabiliteDocumentee = AppThemeColors.fiabiliteDocumentee;
+  static const Color fiabilitePartielle = AppThemeColors.fiabilitePartielle;
+  static const Color fiabiliteAVerifier = AppThemeColors.fiabiliteAVerifier;
+
   static const Color mapPointTeal = AppThemeColors.mapPointTeal;
   static const Color mapPointGreen = AppThemeColors.mapPointGreen;
   static const Color mapPointOrange = AppThemeColors.mapPointOrange;

@@ -177,7 +177,9 @@ class ApiClient {
       case 403:
         throw const ServerFailure(message: 'Access denied.');
       case 404:
-        throw const ServerFailure(message: 'Resource not found.');
+        // Auth endpoints use 404 with a meaningful body (e.g. "User not
+        // found"); surface it instead of a generic message.
+        throw ServerFailure(message: _parseError(response));
       case 429:
         throw const ServerFailure(
           message: 'Too many attempts. Try again later.',

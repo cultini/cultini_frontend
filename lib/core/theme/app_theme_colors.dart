@@ -2,27 +2,46 @@ import 'package:flutter/material.dart';
 
 abstract class AppThemeColors {
   AppThemeColors._();
-  static const Color primary = Color(0xFF1A3A2A);
-  static const Color primaryLight = Color(0xFF2D5E3F);
-  static const Color primarySurface = Color(0xFFE8F0EC);
-  static const Color accent = Color(0xFFE8B84B);
-  static const Color accentDark = Color(0xFFD4A030);
-  static const Color background = Color(0xFFF5F0E4);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFF0EAD9);
-  static const Color textPrimary = Color(0xFF1A1A1A);
-  static const Color textSecondary = Color(0xFF6B6B6B);
+
+  // ─── Azetta core palette ──────────────────────────────────────────────────
+  // Terracotta / clay red (primary), deep indigo (secondary), sand / ochre
+  // (accent), warm charcoal (text), warm off-white (background).
+  static const Color primary = Color(0xFFB04A2C); // clay / terracotta
+  static const Color primaryLight = Color(0xFFC9694A);
+  static const Color primarySurface = Color(0xFFF3E1D6); // pale clay wash
+  static const Color accent = Color(0xFFD2A24A); // sand / ochre
+  static const Color accentDark = Color(0xFFB07F2C);
+  static const Color background = Color(0xFFF5EEE0); // warm off-white
+  static const Color surface = Color(0xFFFBF6EC); // warm card white
+  static const Color surfaceVariant = Color(0xFFEFE4D2); // woven sand
+  static const Color textPrimary = Color(0xFF2B2018); // warm charcoal
+  static const Color textSecondary = Color(0xFF6F5F52);
   static const Color textLight = Color(0xFFFFFFFF);
-  static const Color textMuted = Color(0xFF9E9E9E);
-  static const Color success = Color(0xFF58CC02);
-  static const Color error = Color(0xFFFF4B4B);
-  static const Color divider = Color(0xFFE0D9CC);
-  static const Color mapPointTeal = Color(0xFF4ECDC4);
-  static const Color mapPointGreen = Color(0xFF1A3A2A);
-  static const Color mapPointOrange = Color(0xFFFF9F43);
-  static const Color mapPointYellow = Color(0xFFE8B84B);
-  static const Color chatBubbleAI = Color(0xFFFFFFFF);
-  static const Color chatBubbleUser = Color(0xFF1A3A2A);
+  static const Color textMuted = Color(0xFFA3927F);
+  static const Color success = Color(0xFF5E7444); // woven green
+  static const Color error = Color(0xFFB23A2E);
+  static const Color divider = Color(0xFFDDCEBB);
+
+  // Deep indigo — secondary cultural accent.
+  static const Color indigo = Color(0xFF273456);
+  static const Color indigoLight = Color(0xFF3A4A73);
+
+  static const Color mapPointTeal = Color(0xFF4E9A8F);
+  static const Color mapPointGreen = success;
+  static const Color mapPointOrange = Color(0xFFD2792E);
+  static const Color mapPointYellow = accent;
+
+  // Chat bubbles — distinct warm tones.
+  static const Color chatBubbleAI = Color(0xFFF6EDDC); // warm sand card
+  static const Color chatBubbleUser = primary; // clay
+
+  // Fiabilité chip tones.
+  static const Color fiabiliteDocumentee = success; // woven green
+  static const Color fiabilitePartielle = accentDark; // ochre
+  static const Color fiabiliteAVerifier = Color(0xFFA8442B); // rust clay
+
+  // Geometric "talwt" motif tint.
+  static const Color motif = indigo;
 
   // legacy aliases
   static const Color primaryAccent = primary;
@@ -43,7 +62,7 @@ abstract class AppThemeColors {
   static const Color border = divider;
   static const Color formCard = surface;
   static const Color warning = accentDark;
-  static const Color info = primaryLight;
+  static const Color info = indigo;
   static const Color activeEventDot = success;
   static const Color readingBackground = background;
   static const Color highlight = accent;
@@ -51,7 +70,7 @@ abstract class AppThemeColors {
   static const Color google = Color(0xFFDB4437);
   static const Color apple = Color(0xFF000000);
   static const Color overlay = Color(0x66000000);
-  static const Color shimmer = Color(0xFFEDEDED);
+  static const Color shimmer = Color(0xFFEDE3D2);
   static const Color photoSlot = surfaceVariant;
   static const Color tipsBackground = primarySurface;
   static const Color enrollDisabled = textMuted;

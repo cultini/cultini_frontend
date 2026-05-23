@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/azetta_motif.dart';
 import '../domain/entities/source_entity.dart';
 
 /// Renders the corpus sources backing an AI answer.
@@ -14,10 +15,10 @@ class SourceList extends StatelessWidget {
     if (sources.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.divider),
       ),
       child: Column(
@@ -26,19 +27,22 @@ class SourceList extends StatelessWidget {
           Row(
             children: [
               const Icon(Icons.menu_book_outlined,
-                  size: 14, color: AppColors.textSecondary),
+                  size: 14, color: AppColors.indigo),
               const SizedBox(width: 6),
               Text(
                 'Sources (${sources.length})',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.hankenGrotesk(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                  color: AppColors.indigo,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 6),
+          const AzettaDivider(height: 12, opacity: 0.18, cell: 14),
+          const SizedBox(height: 2),
           ...sources.map((s) => _SourceRow(source: s)),
         ],
       ),
@@ -57,13 +61,13 @@ class _SourceRow extends StatelessWidget {
       if (source.source != null && source.source!.isNotEmpty) source.source!,
     ];
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 2),
-            child: Icon(Icons.circle, size: 6, color: AppColors.accent),
+            padding: EdgeInsets.only(top: 3),
+            child: Icon(Icons.diamond_outlined, size: 9, color: AppColors.accent),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -72,18 +76,21 @@ class _SourceRow extends StatelessWidget {
               children: [
                 Text(
                   source.titre?.isNotEmpty == true ? source.titre! : 'Source',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
+                  style: GoogleFonts.fraunces(
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
                 if (subtitleParts.isNotEmpty)
-                  Text(
-                    subtitleParts.join(' · '),
-                    style: GoogleFonts.poppins(
-                      fontSize: 10.5,
-                      color: AppColors.textSecondary,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 1),
+                    child: Text(
+                      subtitleParts.join(' · '),
+                      style: GoogleFonts.hankenGrotesk(
+                        fontSize: 10.5,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ),
               ],
@@ -103,22 +110,39 @@ class _FiabiliteBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final verified = fiabilite == 'documentee';
-    final color = verified ? AppColors.success : AppColors.accentDark;
-    final label = verified ? 'documentée' : 'à vérifier';
+    // Each fiabilité value carries its own tone; unknown values fall back to a
+    // neutral tone and show the raw label.
+    final (Color color, String label) = switch (fiabilite) {
+      'documentee' => (AppColors.fiabiliteDocumentee, 'documentée'),
+      'partielle' => (AppColors.fiabilitePartielle, 'partielle'),
+      'a_verifier' => (AppColors.fiabiliteAVerifier, 'à vérifier'),
+      _ => (AppColors.textSecondary, fiabilite),
+    };
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
-      child: Text(
-        label,
-        style: GoogleFonts.poppins(
-          fontSize: 9.5,
-          fontWeight: FontWeight.w600,
-          color: color,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: GoogleFonts.hankenGrotesk(
+              fontSize: 9.5,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }

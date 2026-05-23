@@ -43,14 +43,20 @@ class MessageBubble extends StatelessWidget {
                         ? AppColors.chatBubbleUser
                         : AppColors.chatBubbleAI,
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(18),
-                      topRight: const Radius.circular(18),
-                      bottomLeft: Radius.circular(isUser ? 18 : 4),
-                      bottomRight: Radius.circular(isUser ? 4 : 18),
+                      topLeft: const Radius.circular(16),
+                      topRight: const Radius.circular(16),
+                      bottomLeft: Radius.circular(isUser ? 16 : 4),
+                      bottomRight: Radius.circular(isUser ? 4 : 16),
                     ),
+                    border: isUser
+                        ? null
+                        : Border.all(
+                            color: AppColors.divider,
+                            width: 1,
+                          ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
+                        color: AppColors.textPrimary.withValues(alpha: 0.06),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -58,11 +64,11 @@ class MessageBubble extends StatelessWidget {
                   ),
                   child: Text(
                     message.text,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.hankenGrotesk(
                       fontSize: 14,
                       color:
                           isUser ? AppColors.textLight : AppColors.textPrimary,
-                      height: 1.5,
+                      height: 1.55,
                     ),
                   ),
                 ),
@@ -91,7 +97,7 @@ class _AIAvatar extends StatelessWidget {
       width: 34,
       height: 34,
       decoration: const BoxDecoration(
-        color: AppColors.primary,
+        color: AppColors.indigo,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,

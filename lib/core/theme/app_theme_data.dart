@@ -10,18 +10,24 @@ abstract class AppThemeData {
 
   static ThemeData get lightTheme {
     return ThemeData(
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       primaryColor: AppThemeColors.primaryAccent,
       scaffoldBackgroundColor: AppThemeColors.background,
       cardColor: AppThemeColors.card,
-      colorScheme: const ColorScheme.dark(
-        primary: AppThemeColors.primaryAccent,
-        secondary: AppThemeColors.secondaryAccent,
-        surface: AppThemeColors.surface,
-        error: AppThemeColors.error,
+      colorScheme: const ColorScheme.light(
+        primary: AppThemeColors.primary,
         onPrimary: Colors.white,
+        primaryContainer: AppThemeColors.primarySurface,
+        onPrimaryContainer: AppThemeColors.primary,
+        secondary: AppThemeColors.indigo,
         onSecondary: Colors.white,
+        tertiary: AppThemeColors.accent,
+        onTertiary: AppThemeColors.textPrimary,
+        surface: AppThemeColors.surface,
         onSurface: AppThemeColors.primaryText,
+        surfaceContainerHighest: AppThemeColors.surfaceVariant,
+        outline: AppThemeColors.divider,
+        error: AppThemeColors.error,
         onError: Colors.white,
       ),
       appBarTheme: AppBarTheme(
@@ -34,7 +40,7 @@ abstract class AppThemeData {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppThemeColors.button,
           foregroundColor: Colors.white,
-          elevation: 2,
+          elevation: 1,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppThemeMetrics.radiusMd),
           ),
@@ -81,8 +87,8 @@ abstract class AppThemeData {
       ),
       cardTheme: CardThemeData(
         color: AppThemeColors.card,
-        elevation: 4,
-        shadowColor: const Color(0x40000000),
+        elevation: 2,
+        shadowColor: const Color(0x1A2B2018),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppThemeMetrics.radiusLg),
           side: const BorderSide(color: AppThemeColors.inputBorder, width: 0.5),

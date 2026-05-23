@@ -29,15 +29,17 @@ class SuggestionChipsRow extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.divider),
+                color: AppColors.primarySurface,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.25),
+                ),
               ),
               child: Text(
                 label,
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.hankenGrotesk(
                   fontSize: 12,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primary,
                 ),
               ),
