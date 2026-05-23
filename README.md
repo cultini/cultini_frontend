@@ -35,7 +35,7 @@ logic run server-side.
 - Authentication (login/register) — talks to a Node/Express auth service
 - Conversational AI / RAG chat — talks to a FastAPI AI service and shows source nodes
 - Documentation browser — searchable, filterable; currently serves from local mock data
-- Contribution form — validated suggestions stored locally (mock)
+- Contribution form — validated suggestions sent to the FastAPI backend (`POST /contributions`) for auto-filtering + moderation; a local copy of accepted submissions is kept best-effort
 - Map of 58 wilayas with tappable markers pre-filtering documentation
 - Profile screen with user info and logout
 
@@ -139,6 +139,15 @@ Chat (RAG):
 curl -X POST "$AI_BASE_URL/chat" \
   -H "Content-Type: application/json" \
   -d '{"chat_id":"<id>","question":"Tell me about pottery in Wilaya X"}'
+```
+
+Contribution (FastAPI auto-filter + moderation):
+
+```bash
+curl -X POST "$AI_BASE_URL/contributions" \
+  -H "Content-Type: application/json" \
+  -d '{"titre":"...","categorie":"pottery","region":"Tizi Ouzou","contenu":"...","source":"...","contributor_name":"..."}'
+# → {"accepted": true, "status": "pending", "message": "..."}
 ```
 
 Replace environment variables or expand the URLs from `lib/core/constants/end_points.dart`.
@@ -246,7 +255,7 @@ lib/
     ├── auth/                 # login/register/splash → Node /api/auth, AuthBloc
     ├── chat/                 # AI chat → FastAPI /chat, sources + metrics
     ├── docs/                 # searchable/filterable documentation + detail (mock)
-    ├── contribution/         # validated suggestion form (mock, stores locally)
+    ├── contribution/         # validated suggestion form → FastAPI /contributions (auto-filter + moderation)
     ├── map/                  # 58 tappable wilayas → Documentation pre-filtered
     └── profile/              # signed-in user + logout
 ```
@@ -263,7 +272,7 @@ mock for real means changing a datasource/binding — no widget touches HTTP dir
 | Auth | **Live HTTP** | Node/Express `POST /api/auth/{login,register}` |
 | Chat | **Live HTTP** | FastAPI `POST /chat` `{chat_id, question}` → `{response, source_nodes[], metrics}` |
 | Documentation | **Mock** (`DummyData`, corpus-derived) | none yet — `DocsRemoteDataSource` is scaffolded |
-| Contribution | **Mock** (stores in `shared_preferences`, logs) | none yet |
+| Contribution | **Live HTTP** | FastAPI `POST /contributions` `{titre, categorie, region, contenu, source, contributor_name}` → `{accepted, status, message}` (auto-filter + moderation queue); accepted items are also cached locally |
 | Map / wilayas | **Static** list of 58 wilayas | none needed |
 
 ## Pointing at a real backend
@@ -292,10 +301,10 @@ flutter run            # emulator / device   (use -d chrome for web)
 flutter analyze        # static analysis — currently clean
 ```
 
-Auth and chat require their backends running (start `cultini-backend` on :3000 and
-`cultini_AI` on :8000, then set the base URLs above). Map, Documentation, and Contribution
-work fully offline on mock data. The OSM basemap needs network to render tiles; wilaya markers
-are tappable regardless.
+Auth, chat, and contribution require their backends running (start `cultini-backend` on :3000
+for auth and `cultini_AI` on :8000 for chat + contributions, then set the base URLs above).
+Map and Documentation work fully offline on mock data. The OSM basemap needs network to render
+tiles; wilaya markers are tappable regardless.
 
 > **Note:** `flutter test` cannot run while the project sits under a path containing an
 > apostrophe (`…/Github Repo's/…`) — Flutter's generated test listener embeds the path in a
