@@ -260,7 +260,7 @@ lib/
     └── profile/              # signed-in user + logout
 ```
 
-## Repository pattern (mock ↔ real)
+## Repository pattern
 
 Every backend interaction goes through a **repository interface** in `domain/repositories/`,
 implemented in `data/repositories/`. Implementations delegate to **datasources**
