@@ -106,7 +106,7 @@ class SocialButton extends StatelessWidget {
             const SizedBox(width: 10),
             Text(
               label,
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.hankenGrotesk(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,

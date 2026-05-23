@@ -4,31 +4,34 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_theme_colors.dart';
 
 /// Typography tokens for the app.
+///
+/// Azetta type system: a warm characterful serif (Fraunces) for headings and
+/// a clean humanist sans (Hanken Grotesk) for body / labels. Defined once here.
 abstract class AppThemeTextStyles {
   AppThemeTextStyles._();
 
-  static TextStyle get appBarTitleStyle => GoogleFonts.plusJakartaSans(
+  static TextStyle get appBarTitleStyle => GoogleFonts.fraunces(
     color: AppThemeColors.primaryText,
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
 
-  static TextStyle get buttonTextStyle => GoogleFonts.plusJakartaSans(
+  static TextStyle get buttonTextStyle => GoogleFonts.hankenGrotesk(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
   );
 
   static TextStyle get inputHintStyle =>
-      GoogleFonts.inter(color: AppThemeColors.hintText, fontSize: 14);
+      GoogleFonts.hankenGrotesk(color: AppThemeColors.hintText, fontSize: 14);
 
-  static TextStyle get inputLabelStyle => GoogleFonts.plusJakartaSans(
+  static TextStyle get inputLabelStyle => GoogleFonts.hankenGrotesk(
     color: AppThemeColors.secondaryText,
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle get splashLargeText => GoogleFonts.playfairDisplay(
+  static TextStyle get splashLargeText => GoogleFonts.fraunces(
     color: AppThemeColors.primaryText,
     fontSize: 48,
     height: 1.0,
@@ -36,111 +39,111 @@ abstract class AppThemeTextStyles {
     fontStyle: FontStyle.italic,
   );
 
-  static TextStyle get splashMediumText => GoogleFonts.playfairDisplay(
+  static TextStyle get splashMediumText => GoogleFonts.fraunces(
     color: AppThemeColors.subtitleText,
     fontSize: 18,
     height: 1.55,
     fontStyle: FontStyle.italic,
   );
 
-  static TextStyle get onboardingLargeText => GoogleFonts.publicSans(
+  static TextStyle get onboardingLargeText => GoogleFonts.fraunces(
     color: AppThemeColors.primaryText,
     fontSize: 36,
     fontStyle: FontStyle.normal,
   );
 
-  static TextStyle get onboardingMediumText => GoogleFonts.publicSans(
+  static TextStyle get onboardingMediumText => GoogleFonts.hankenGrotesk(
     color: AppThemeColors.subtitleText,
     fontSize: 18,
     fontStyle: FontStyle.normal,
   );
 
   static TextTheme get textTheme => TextTheme(
-    displayLarge: GoogleFonts.plusJakartaSans(
+    displayLarge: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 32,
       fontWeight: FontWeight.bold,
       height: 1.2,
     ),
-    displayMedium: GoogleFonts.plusJakartaSans(
+    displayMedium: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 28,
       fontWeight: FontWeight.bold,
       height: 1.2,
     ),
-    displaySmall: GoogleFonts.plusJakartaSans(
+    displaySmall: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 24,
       fontWeight: FontWeight.bold,
       height: 1.3,
     ),
-    headlineLarge: GoogleFonts.plusJakartaSans(
+    headlineLarge: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 22,
       fontWeight: FontWeight.w600,
       height: 1.3,
     ),
-    headlineMedium: GoogleFonts.plusJakartaSans(
+    headlineMedium: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 20,
       fontWeight: FontWeight.w600,
       height: 1.3,
     ),
-    headlineSmall: GoogleFonts.plusJakartaSans(
+    headlineSmall: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 18,
       fontWeight: FontWeight.w600,
       height: 1.4,
     ),
-    titleLarge: GoogleFonts.plusJakartaSans(
+    titleLarge: GoogleFonts.fraunces(
       color: AppThemeColors.primaryText,
       fontSize: 16,
       fontWeight: FontWeight.w600,
       height: 1.4,
     ),
-    titleMedium: GoogleFonts.plusJakartaSans(
+    titleMedium: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.primaryText,
       fontSize: 14,
       fontWeight: FontWeight.w600,
       height: 1.4,
     ),
-    titleSmall: GoogleFonts.plusJakartaSans(
+    titleSmall: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.secondaryText,
       fontSize: 12,
       fontWeight: FontWeight.w600,
       height: 1.4,
     ),
-    bodyLarge: GoogleFonts.inter(
+    bodyLarge: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.primaryText,
       fontSize: 18,
       fontWeight: FontWeight.normal,
       height: 1.6,
     ),
-    bodyMedium: GoogleFonts.inter(
+    bodyMedium: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.primaryText,
       fontSize: 16,
       fontWeight: FontWeight.normal,
       height: 1.5,
     ),
-    bodySmall: GoogleFonts.plusJakartaSans(
+    bodySmall: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.secondaryText,
       fontSize: 14,
       fontWeight: FontWeight.normal,
       height: 1.4,
     ),
-    labelLarge: GoogleFonts.plusJakartaSans(
+    labelLarge: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.primaryText,
       fontSize: 14,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.1,
     ),
-    labelMedium: GoogleFonts.plusJakartaSans(
+    labelMedium: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.secondaryText,
       fontSize: 12,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.5,
     ),
-    labelSmall: GoogleFonts.plusJakartaSans(
+    labelSmall: GoogleFonts.hankenGrotesk(
       color: AppThemeColors.hintText,
       fontSize: 10,
       fontWeight: FontWeight.w500,

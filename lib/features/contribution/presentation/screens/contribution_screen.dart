@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/azetta_motif.dart';
 import '../../../../core/extensions/snackbar_extensions.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
@@ -114,12 +115,29 @@ class _ContributionViewState extends State<_ContributionView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Proposez une fiche pour enrichir le corpus. Elle sera revue avant publication.',
-                    style: GoogleFonts.poppins(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                      height: 1.4,
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.primarySurface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.18),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const AzettaDivider(height: 12, opacity: 0.2, cell: 14),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Proposez une fiche pour enrichir le corpus. Elle sera revue avant publication.',
+                          style: GoogleFonts.hankenGrotesk(
+                            fontSize: 13,
+                            color: AppColors.textSecondary,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -238,7 +256,7 @@ class _DropdownField<T> extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.hankenGrotesk(
             fontSize: 13,
             fontWeight: FontWeight.w500,
             color: AppColors.textSecondary,
@@ -248,7 +266,7 @@ class _DropdownField<T> extends StatelessWidget {
         DropdownButtonFormField<T>(
           initialValue: value,
           isExpanded: true,
-          hint: Text(hint, style: GoogleFonts.poppins(fontSize: 14)),
+          hint: Text(hint, style: GoogleFonts.hankenGrotesk(fontSize: 14)),
           items: items,
           onChanged: onChanged,
           validator: validator,
@@ -278,7 +296,7 @@ class _MultilineField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.hankenGrotesk(
             fontSize: 13,
             fontWeight: FontWeight.w500,
             color: AppColors.textSecondary,
@@ -289,7 +307,8 @@ class _MultilineField extends StatelessWidget {
           controller: controller,
           validator: validator,
           maxLines: 5,
-          style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textPrimary),
+          style: GoogleFonts.hankenGrotesk(
+              fontSize: 14, color: AppColors.textPrimary),
           decoration: InputDecoration(hintText: hint),
         ),
       ],

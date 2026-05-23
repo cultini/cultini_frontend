@@ -41,7 +41,7 @@ class _AppTextFieldState extends State<AppTextField> {
       children: [
         Text(
           widget.label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.hankenGrotesk(
             fontSize: 13,
             fontWeight: FontWeight.w500,
             color: AppColors.textSecondary,
@@ -55,7 +55,7 @@ class _AppTextFieldState extends State<AppTextField> {
           validator: widget.validator,
           onChanged: widget.onChanged,
           textInputAction: widget.textInputAction,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.hankenGrotesk(
             fontSize: 14,
             color: AppColors.textPrimary,
           ),

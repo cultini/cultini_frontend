@@ -18,8 +18,8 @@ class MetricsPanel extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.primarySurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.12)),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.18)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,16 +29,17 @@ class MetricsPanel extends StatelessWidget {
             children: [
               Text(
                 'Couverture culturelle',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.hankenGrotesk(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
                   color: AppColors.textPrimary,
                 ),
               ),
               Text(
                 '${coverage.toStringAsFixed(0)} %',
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
+                style: GoogleFonts.fraunces(
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: AppColors.primary,
                 ),
@@ -50,23 +51,28 @@ class MetricsPanel extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: coverage / 100,
-              minHeight: 6,
-              backgroundColor: AppColors.divider,
+              minHeight: 7,
+              backgroundColor: AppColors.surface,
               valueColor: const AlwaysStoppedAnimation(AppColors.primary),
             ),
           ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 6,
+          const SizedBox(height: 12),
+          Row(
             children: [
-              _MetricChip(
-                label: 'distinct-1',
-                value: metrics.distinct1.toStringAsFixed(2),
+              Expanded(
+                child: _MetricGauge(
+                  label: 'distinct-1',
+                  value: metrics.distinct1,
+                  color: AppColors.indigo,
+                ),
               ),
-              _MetricChip(
-                label: 'distinct-2',
-                value: metrics.distinct2.toStringAsFixed(2),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MetricGauge(
+                  label: 'distinct-2',
+                  value: metrics.distinct2,
+                  color: AppColors.accentDark,
+                ),
               ),
             ],
           ),
@@ -76,40 +82,63 @@ class MetricsPanel extends StatelessWidget {
   }
 }
 
-class _MetricChip extends StatelessWidget {
-  const _MetricChip({required this.label, required this.value});
+/// A mini gauge for a 0–1 lexical-diversity score: label, value, and a thin bar.
+class _MetricGauge extends StatelessWidget {
+  const _MetricGauge({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
   final String label;
-  final String value;
+  final double value;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
+    final clamped = value.clamp(0.0, 1.0);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppColors.divider),
       ),
-      child: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: '$label  ',
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                color: AppColors.textSecondary,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                label,
+                style: GoogleFonts.hankenGrotesk(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
+                ),
               ),
-            ),
-            TextSpan(
-              text: value,
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+              Text(
+                value.toStringAsFixed(2),
+                style: GoogleFonts.fraunces(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
               ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: clamped,
+              minHeight: 5,
+              backgroundColor: AppColors.divider,
+              valueColor: AlwaysStoppedAnimation(color),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

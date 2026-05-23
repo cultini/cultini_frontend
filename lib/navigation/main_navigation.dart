@@ -138,7 +138,7 @@ class _DefaultTabIcon extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           item.label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.hankenGrotesk(
             fontSize: 10,
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
             color: isActive ? AppColors.primary : AppColors.textSecondary,
@@ -177,7 +177,7 @@ class _MapTabIcon extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           item.label,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.hankenGrotesk(
             fontSize: 10,
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
             color: isActive ? AppColors.primary : AppColors.textSecondary,
