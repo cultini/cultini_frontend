@@ -29,6 +29,7 @@ import '../features/docs/domain/repositories/docs_repository.dart';
 import '../features/docs/domain/usecases/get_docs_usecase.dart';
 import '../features/docs/presentation/bloc/docs_cubit.dart';
 import '../features/contribution/data/datasources/contribution_local_data_source.dart';
+import '../features/contribution/data/datasources/contribution_remote_data_source.dart';
 import '../features/contribution/data/repositories/contribution_repository_impl.dart';
 import '../features/contribution/domain/repositories/contribution_repository.dart';
 import '../features/contribution/domain/usecases/submit_contribution_usecase.dart';
@@ -127,9 +128,16 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetDocsUseCase(sl<DocsRepository>()));
   sl.registerFactory(() => DocsCubit(sl<GetDocsUseCase>()));
 
-  // ── Contribution (mock: stores locally) ──────────────────────────────────────
+  // ── Contribution (POST /contributions → FastAPI Azetta backend) ──────────────
+  sl.registerLazySingleton<ContributionRemoteDataSource>(
+    () => ContributionRemoteDataSourceImpl(apiClient: sl<ApiClient>(instanceName: 'ai')),
+  );
   sl.registerLazySingleton<ContributionLocalDataSource>(() => ContributionLocalDataSourceImpl(sl<AppLocalStorage>()));
-  sl.registerLazySingleton<ContributionRepository>(() => ContributionRepositoryImpl(local: sl<ContributionLocalDataSource>()));
+  sl.registerLazySingleton<ContributionRepository>(() => ContributionRepositoryImpl(
+        remote: sl<ContributionRemoteDataSource>(),
+        local: sl<ContributionLocalDataSource>(),
+        networkInfo: sl<NetworkInfo>(),
+      ));
   sl.registerLazySingleton(() => SubmitContributionUseCase(sl<ContributionRepository>()));
   sl.registerFactory(() => ContributionCubit(sl<SubmitContributionUseCase>()));
 }

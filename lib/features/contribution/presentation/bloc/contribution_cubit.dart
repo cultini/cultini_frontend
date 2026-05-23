@@ -3,18 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../domain/entities/contribution_entity.dart';
+import '../../domain/entities/contribution_result_entity.dart';
 import '../../domain/usecases/submit_contribution_usecase.dart';
 
 enum ContributionStatus { idle, submitting, success, failure }
 
 class ContributionState extends Equatable {
-  const ContributionState({this.status = ContributionStatus.idle, this.error});
+  const ContributionState({
+    this.status = ContributionStatus.idle,
+    this.result,
+    this.error,
+  });
 
   final ContributionStatus status;
+
+  /// Backend moderation outcome, set when [status] is success. Tells the screen
+  /// whether the submission was accepted into the queue or auto-rejected.
+  final ContributionResultEntity? result;
   final String? error;
 
   @override
-  List<Object?> get props => [status, error];
+  List<Object?> get props => [status, result, error];
 }
 
 class ContributionCubit extends Cubit<ContributionState> {
@@ -24,8 +33,8 @@ class ContributionCubit extends Cubit<ContributionState> {
   Future<void> submit(ContributionEntity contribution) async {
     emit(const ContributionState(status: ContributionStatus.submitting));
     try {
-      await submitUseCase(contribution);
-      emit(const ContributionState(status: ContributionStatus.success));
+      final result = await submitUseCase(contribution);
+      emit(ContributionState(status: ContributionStatus.success, result: result));
     } catch (e) {
       emit(ContributionState(
         status: ContributionStatus.failure,

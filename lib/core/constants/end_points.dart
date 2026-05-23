@@ -31,4 +31,7 @@ class EndPoints {
   // ── AI / RAG (FastAPI) ──────────────────────────────────────────────────────
   /// Routed, context-aware chat with per-`chat_id` memory.
   static const String chat = '/chat';
+
+  /// Submit a contribution → auto-filter + moderation queue.
+  static const String contributions = '/contributions';
 }

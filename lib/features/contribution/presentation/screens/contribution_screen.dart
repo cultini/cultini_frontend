@@ -89,10 +89,17 @@ class _ContributionViewState extends State<_ContributionView> {
         listenWhen: (p, c) => p.status != c.status,
         listener: (context, state) {
           if (state.status == ContributionStatus.success) {
-            context.showSuccessSnackBar(
-              'Merci ! Votre contribution a été enregistrée.',
-            );
-            _resetForm();
+            final result = state.result;
+            final message =
+                result?.message ?? 'Merci ! Votre contribution a été enregistrée.';
+            if (result == null || result.accepted) {
+              // Cleared the auto-filter → in the moderation queue.
+              context.showSuccessSnackBar(message);
+              _resetForm();
+            } else {
+              // Auto-rejected (spam / doublon): keep the form so the user can edit.
+              context.showErrorSnackBar(message);
+            }
             context.read<ContributionCubit>().reset();
           } else if (state.status == ContributionStatus.failure) {
             context.showErrorSnackBar(state.error ?? "Échec de l'envoi");

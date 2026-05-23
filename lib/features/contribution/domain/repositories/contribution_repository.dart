@@ -1,7 +1,8 @@
 import '../entities/contribution_entity.dart';
+import '../entities/contribution_result_entity.dart';
 
 abstract class ContributionRepository {
-  /// Persists a contribution. The mock implementation stores it locally; a real
-  /// implementation would POST it to the backend.
-  Future<void> submit(ContributionEntity contribution);
+  /// POSTs a contribution to the AI backend's auto-filter and returns the
+  /// moderation outcome (accepted into the queue, or auto-rejected).
+  Future<ContributionResultEntity> submit(ContributionEntity contribution);
 }
