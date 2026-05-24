@@ -84,14 +84,6 @@ class _SplashScreenState extends State<SplashScreen>
                     letterSpacing: 1,
                   ),
                 ),
-                Text(
-                  AppStrings.tifinagh,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: AppColors.accent,
-                    letterSpacing: 3,
-                  ),
-                ),
                 const SizedBox(height: 8),
                 Text(
                   AppStrings.appTagline,
