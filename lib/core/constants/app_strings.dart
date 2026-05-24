@@ -6,7 +6,6 @@ class AppStrings {
   // ── App ─────────────────────────────────────────────────────────────────────
   static const String appName = 'Cultini';
   static const String appTagline = 'Apprendre la culture berbère';
-  static const String tifinagh = 'Langue Kabyle';
 
   // ── Auth ─────────────────────────────────────────────────────────────────────
   static const String login = 'Connexion';
