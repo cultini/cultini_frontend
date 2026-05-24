@@ -1,89 +1,91 @@
 # Cultini — Flutter frontend
 
-Mobile frontend for **Cultini / Azetta**, a RAG-based anti-cultural-homogenization
-project focused on Amazigh (Berber) craftsmanship in Algeria. This app talks to two
-separate backends (auth + AI/RAG); all AI logic lives server-side.
-
-## Stack
-
-- **Flutter** + **Dart**
-- **State management:** `flutter_bloc` (Bloc + Cubit)
-- **Dependency injection:** `get_it` (`lib/di/injection_container.dart`)
-- **Networking:** `http` wrapped in `ApiClient` (`lib/core/network/api_client.dart`)
-- **Navigation:** `go_router` (top-level) + imperative `Navigator` for detail screens
-- **Maps:** `flutter_map` + OpenStreetMap tiles (one tappable marker per wilaya)
-- **Local storage:** `shared_preferences` / `flutter_secure_storage` via `AppLocalStorage`
-- **Config:** `flutter_dotenv` (`.env`)
-
-# Cultini — Flutter frontend
-
-Cultini is the Flutter mobile frontend for the Cultini / Azetta project — a RAG-powered
-platform focused on documenting and promoting Amazigh (Berber) craftsmanship. The app
-integrates with two backends (authentication + AI/RAG); all AI processing and retrieval
-logic run server-side.
-
-## Quick links
-
-- Project root: `README.md`
-- App entrypoint: `lib/main.dart`
-- Dependency injection: `lib/di/injection_container.dart`
-- Network client: `lib/core/network/api_client.dart`
-- Endpoints/config: `lib/core/constants/end_points.dart`
-
-## Features
-
-- Authentication (login/register) — talks to a Node/Express auth service
-- Conversational AI / RAG chat — talks to a FastAPI AI service and shows source nodes
-- Documentation browser — searchable, filterable; currently serves from local mock data
-- Contribution form — validated suggestions sent to the FastAPI backend (`POST /contributions`) for auto-filtering + moderation; a local copy of accepted submissions is kept best-effort
-- Map of 58 wilayas with tappable markers pre-filtering documentation
-- Profile screen with user info and logout
+Mobile frontend for **Cultini**, a RAG-based anti-cultural-homogenization
+project focused on Amazigh (Berber) craftsmanship in Algeria. The app talks to two
+separate backends — a Node/Express auth service and a FastAPI AI/RAG service — and
+keeps all AI logic server-side.
 
 ## Tech stack
 
-- Flutter & Dart
-- State management: `flutter_bloc` (Bloc + Cubit)
-- Navigation: `go_router` (top-level) + imperative `Navigator` for deep/details
-- Dependency injection: `get_it`
-- HTTP: `http` wrapped by a project `ApiClient`
-- Local storage: `shared_preferences` and `flutter_secure_storage` via `AppLocalStorage`
-- Environment config: `flutter_dotenv`
+- **Flutter** & **Dart** (SDK `^3.11.0`)
+- **State management:** `flutter_bloc` `^9.1` (Bloc + Cubit)
+- **Dependency injection:** `get_it` `^9.2` (`lib/di/injection_container.dart`)
+- **Networking:** `http` `^1.6` wrapped in `ApiClient` (`lib/core/network/api_client.dart`)
+- **Navigation:** `go_router` `^17` (top-level) + imperative `Navigator` for detail screens
+- **Maps:** `flutter_map` `^7` + `latlong2` over OpenStreetMap tiles
+- **Local storage:** `shared_preferences` / `flutter_secure_storage` via `AppLocalStorage`
+- **Config:** `flutter_dotenv` `^6` (`.env`)
+- Plus `dartz` (Either), `equatable`, `google_fonts`, and connectivity helpers.
+
+## Features
+
+- **Authentication** (login / register / splash) — Node/Express auth service.
+- **AI / RAG chat** — FastAPI service, streamed token-by-token over Server-Sent
+  Events, showing source nodes and cultural-coverage metrics.
+- **Documentation browser** — searchable and filterable; currently served from local
+  mock data (`DummyData`).
+- **Contribution form** — validated submissions posted to the FastAPI backend, which
+  auto-filters and queues them for moderation.
+- **Map of wilayas** — tappable markers that open the Documentation pre-filtered by
+  region.
+- **Profile** — signed-in user info and logout.
 
 ## Architecture overview
 
-Clean architecture per feature:
+Clean architecture, one slice per feature:
 
 - `domain/` — entities, repository interfaces, usecases
 - `data/` — models, datasources (remote/local), repository implementations
 - `presentation/` — blocs/cubits, screens, widgets
 
-All backend access goes through repository interfaces. Implementations delegate to
-datasources (`*_remote_data_source.dart` for HTTP calls, `*_local_data_source.dart` for
-mock/cache). Swapping mock and real implementations is done via the DI bindings in
+Every backend interaction goes through a repository interface in `domain/repositories/`
+implemented in `data/repositories/`, which delegates to datasources
+(`*_remote_data_source.dart` for HTTP, `*_local_data_source.dart` for cache/mock).
+No widget touches HTTP directly. Swapping mock for real is a binding change in
 `lib/di/injection_container.dart`.
 
-## Repository layout (high level)
+## Project structure
 
-Important folders and files:
+```
+lib/
+├── main.dart                         # entrypoint: load .env, init DI, launch app
+├── di/injection_container.dart       # get_it registrations (incl. named 'ai' ApiClient)
+├── navigation/main_navigation.dart   # bottom-nav shell (Map · Docs · Chat · Contribuer · Profil)
+├── core/
+│   ├── constants/                    # end_points.dart (base URLs + paths), app_strings, storage_keys
+│   ├── network/                      # api_client.dart, network_info.dart
+│   ├── storage/                      # app_local_storage.dart
+│   ├── router/                       # app_router.dart (go_router) + app_routes.dart
+│   ├── theme/                        # ThemeData + color/metric/text tokens
+│   ├── validators/                   # AppValidators (email, password, …)
+│   ├── widgets/                      # custom_button, custom_text_field, azetta_motif
+│   ├── extensions/ · errors/ · usecase/
+│   └── data/dummy_data.dart          # mock corpus for Documentation (no backend yet)
+└── features/
+    ├── auth/                         # login/register/splash → Node /api/auth, AuthBloc
+    ├── chat/                         # AI chat → FastAPI /chat (SSE), sources + metrics
+    ├── docs/                         # searchable/filterable documentation + detail (mock)
+    ├── contribution/                 # validated form → FastAPI /contributions
+    ├── map/                          # tappable wilayas → Documentation pre-filtered
+    └── profile/                      # signed-in user + logout
+```
 
-- `lib/main.dart` — application entrypoint and top-level router initialization
-- `lib/di/injection_container.dart` — `get_it` registrations and environment bindings
-- `lib/core/network/api_client.dart` — centralized HTTP client, timeout, interceptors
-- `lib/core/constants/end_points.dart` — base URLs and API paths (reads from `.env`)
-- `lib/core/storage/app_local_storage.dart` — local storage wrapper
-- `lib/core/router/app_router.dart` — `go_router` configuration and route names
-- `lib/navigation/main_navigation.dart` — bottom navigation shell
+## Feature / backend status
 
-Feature roots: `lib/features/{auth,chat,docs,contribution,map,profile}`
+| Feature | Today | Backend |
+| --- | --- | --- |
+| Auth | **Live HTTP** | Node/Express `POST /api/auth/{login,register}` |
+| Chat | **Live HTTP (SSE stream)** | FastAPI `POST /chat` `{chat_id, question}` → SSE stream of meta / token / done frames |
+| Documentation | **Mock** (`DummyData`) | none yet — `DocsRemoteDataSource` is scaffolded (throws `UnimplementedError`) |
+| Contribution | **Live HTTP** | FastAPI `POST /contributions` → `{accepted, status, message}` (auto-filter + moderation queue); accepted items also cached locally |
+| Map / wilayas | **Static** wilaya list | none needed |
 
 ## Prerequisites
 
-- Flutter SDK (stable channel) — recommended: latest stable
-- Android SDK / Xcode (if building for mobile) or Chrome for web
-- `cultini-backend` (Node/Express) running on :3000 for auth (optional for offline)
-- `cultini_AI` (FastAPI) running on :8000 for chat (optional for offline)
-
-Install Flutter packages:
+- Flutter SDK (stable channel) compatible with Dart `^3.11.0`
+- Android SDK / Xcode for mobile, or Chrome for web
+- `cultini-backend` (Node/Express) on `:3000` for auth
+- `cultini_AI` (FastAPI) on `:8000` for chat and contributions
 
 ```bash
 flutter pub get
@@ -91,57 +93,70 @@ flutter pub get
 
 ## Environment (.env)
 
-Copy the example and set service URLs appropriate for your environment:
+Base URLs are centralized in `lib/core/constants/end_points.dart` and read from `.env`.
+Copy the example and adjust for your environment:
 
 ```bash
 cp .env.example .env
-# Edit .env and set AUTH_BASE_URL and AI_BASE_URL
 ```
-
-Example `.env` values for Android emulator:
 
 ```dotenv
-AUTH_BASE_URL=http://10.0.2.2:3000
-AI_BASE_URL=http://10.0.2.2:8000
+# .env  — Android emulator example (10.0.2.2 = the host machine)
+AUTH_BASE_URL=http://10.0.2.2:3000   # Node/Express (cultini-backend)
+AI_BASE_URL=http://10.0.2.2:8000     # FastAPI (cultini_AI)
 ```
 
-- Use `localhost` on desktop / iOS simulator, or your machine's LAN IP for a physical device.
-- The project injects a named `ApiClient` instance for AI (`instanceName: 'ai'`).
+- Use `http://localhost` on the iOS simulator / desktop, or your machine's LAN IP
+  (e.g. `http://192.168.1.20:3000`) for a physical device.
+- DI registers a default `ApiClient` targeting `AUTH_BASE_URL` and a second named
+  instance (`instanceName: 'ai'`) targeting `AI_BASE_URL`; the latter is injected into
+  the **chat** and **contribution** datasources.
 
-## Running the app
-
-Common commands:
+## Running
 
 ```bash
 flutter pub get
-flutter run            # run on connected device or default emulator (use -d chrome for web)
+flutter run            # connected device / emulator (use -d chrome for web)
 flutter analyze        # static analysis
 ```
 
-Tips:
+- For the Android emulator, `10.0.2.2` refers to the host machine.
+- Start the backends first if you want auth, chat, or contributions; Map and
+  Documentation work offline on mock data (the OSM basemap still needs network to
+  render tiles, but wilaya markers are tappable regardless).
 
-- For Android emulator, `10.0.2.2` refers to the host machine.
-- If you run the Node/AI backends locally, start them first and update `.env`.
+## API integration
 
-## API examples
+The networking layer is `lib/core/network/api_client.dart`; endpoint paths live in
+`lib/core/constants/end_points.dart`.
 
-Auth (login):
+### Auth (login)
 
 ```bash
 curl -X POST "$AUTH_BASE_URL/api/auth/login" \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"password"}'
+# → {"token":"<jwt>","user":{"id":"...","name":"...","email":"..."}}
 ```
 
-Chat (RAG):
+### Chat (RAG, Server-Sent Events)
+
+`/chat` is **not** a plain JSON endpoint — it returns an SSE stream. The chat
+datasource uses `ApiClient.postStream()` and parses `data:` frames into a union of
+events: `ChatMetaEvent` (route + source nodes), `ChatTokenEvent` (a response delta),
+`ChatDoneEvent` (final metrics), and `ChatErrorEvent`.
 
 ```bash
-curl -X POST "$AI_BASE_URL/chat" \
+curl -N -X POST "$AI_BASE_URL/chat" \
   -H "Content-Type: application/json" \
-  -d '{"chat_id":"<id>","question":"Tell me about pottery in Wilaya X"}'
+  -d '{"chat_id":"<id>","question":"Tell me about pottery in Tizi Ouzou"}'
+# → text/event-stream: a sequence of "data: {...}" frames (meta, then tokens, then done)
 ```
 
-Contribution (FastAPI auto-filter + moderation):
+### Contribution (FastAPI auto-filter + moderation)
+
+The form collects `wilaya`, which is sent as `region`; `categorie` is sent as its
+API value (e.g. `savoir-faire`).
 
 ```bash
 curl -X POST "$AI_BASE_URL/contributions" \
@@ -150,163 +165,57 @@ curl -X POST "$AI_BASE_URL/contributions" \
 # → {"accepted": true, "status": "pending", "message": "..."}
 ```
 
-Replace environment variables or expand the URLs from `lib/core/constants/end_points.dart`.
+The client reads `{accepted, status, message}` from the response. (The backend also
+returns `id` and `flags`, which the app ignores.)
 
-## Development notes
+## Pointing the Documentation feature at a real backend
 
-- Dependency injection: inspect `lib/di/injection_container.dart` to see registrations
-  and how mocks vs real datasources are bound.
-- Networking: `lib/core/network/api_client.dart` centralizes headers, timeouts and
-  error handling; feature remote data sources call it.
-- Repositories: each feature exposes a repository interface in `domain/repositories` and
-  an implementation in `data/repositories` that composes datasources.
-- Mock data: `lib/core/data/dummy_data.dart` is used by the documentation feature.
+The Documentation feature currently reads `DummyData.docEntries` via
+`DocsLocalDataSourceImpl`. To wire a real endpoint later:
 
-How to swap mock → real for a feature:
-
-1. Implement the remote datasource (if scaffolded) or update the existing one.
-2. Update bindings in `lib/di/injection_container.dart` to register the remote
-   implementation in place of the local/mock one.
-3. Restart the app.
+1. Add the path to `EndPoints` and implement `DocsRemoteDataSource.getEntries`.
+2. Have `DocsRepositoryImpl` prefer remote (online-first) with the local mock as fallback.
+3. Update the binding in `lib/di/injection_container.dart` and restart.
 
 ## Testing
-
-Unit and widget tests live in the `test/` directory. Run tests with:
 
 ```bash
 flutter test
 ```
 
-Important: `flutter test` may fail if the project path contains an apostrophe
-(e.g., `Github Repo's`) due to a limitation in the generated test listener embedding
-the path in a single-quoted string. If you encounter syntax errors during `flutter test`,
-move the project to a path without apostrophes and retry.
+Tests live in `test/` — `cultini_test.dart` covers `DocsState.filtered()`,
+`ChatMetricsModel.fromJson()`, the `DocCategory` API round-trip, and `AppValidators`;
+`widget_test.dart` is the default boilerplate.
 
-Continuous integration: recommended steps for CI
-
-1. Install Flutter on the runner
-2. Run `flutter pub get`
-3. Run `flutter analyze` and `flutter test`
+> **Note:** `flutter test` cannot run while the project sits under a path containing an
+> apostrophe (`…/Github Repo's/…`). Flutter's generated test listener embeds the path in
+> a single-quoted string and the apostrophe breaks it. The tests are valid (covered by
+> `flutter analyze`) and pass once the project is in an apostrophe-free path.
 
 ## Troubleshooting
 
-- Network issues: ensure emulator/device can reach the host URLs in `.env`.
-- If auth or chat responses are unexpected, verify backend health and request payloads
-  using the API examples above.
-- If tests fail unexpectedly, check the project path for special characters (apostrophes).
-
-## Contributing
-
-1. Fork the repository and open a feature branch.
-2. Add tests for new logic where appropriate.
-3. Open a pull request describing the change and any required backend updates.
-
-## License & contact
-
-This repository follows the licensing stated by the Cultini organization — add LICENSE
-file as appropriate. For questions, contact the maintainers listed in project metadata.
-
----
+- **Network errors** — make sure the emulator/device can reach the URLs in `.env`
+  (`10.0.2.2` for the Android emulator, LAN IP for a physical device).
+- **Chat shows nothing** — confirm `cultini_AI` is running on `AI_BASE_URL` and that
+  the SSE stream is reachable; the client expects `text/event-stream`, not JSON.
+- **Auth fails** — verify `cultini-backend` is up on `AUTH_BASE_URL` and the request
+  payload matches the examples above.
+- **`flutter test` syntax errors** — check the project path for apostrophes (see above).
 
 ## Architecture diagram
 
-Below is a high-level architecture diagram (Mermaid) showing how the app layers
-interact with dependency injection, backends and local storage.
-
 ```mermaid
-
 flowchart LR
   subgraph App
     UI["UI (Screens & Widgets)"] --> PRES["Presentation (Blocs/Cubits)"]
     PRES --> DOM["Domain (Usecases & Repositories)"]
     DOM --> DATA["Data (Datasources & Models)"]
   end
-  DATA --> AUTH[(Auth Service)]
-  DATA --> AI[(AI / RAG Service)]
+  DATA --> AUTH[(Auth Service · Node)]
+  DATA --> AI[(AI / RAG Service · FastAPI)]
   DATA --> LOCAL["Local storage / DummyData"]
   DI[get_it] --> PRES
   DI --> DOM
-  EndPoints["lib/core/constants/end_points.dart"] -.-> AUTH
+  EndPoints["end_points.dart"] -.-> AUTH
   EndPoints -.-> AI
-  
 ```
-
-If you want, I can also add an example CI config or sample backend stubs for local
-development.
-> Clean architecture per feature: `domain` (entities, repository interfaces, usecases) →
-> `data` (models, datasources, repository impls) → `presentation` (bloc/cubit, screens, widgets).
-
-## Project structure
-
-```
-lib/
-├── core/                     # shared infrastructure
-│   ├── constants/            # end_points.dart (base URLs + paths), app_strings, storage_keys
-│   ├── network/              # api_client.dart, network_info.dart
-│   ├── storage/              # app_local_storage.dart
-│   ├── theme/                # single ThemeData + color/metric/text tokens
-│   ├── router/               # go_router config + route names
-│   ├── validators/           # AppValidators (email, password, …)
-│   ├── widgets/              # AppTextField, PrimaryButton, …
-│   └── data/dummy_data.dart  # mock corpus for Documentation (no backend yet)
-├── di/injection_container.dart   # get_it registrations
-├── navigation/main_navigation.dart  # bottom-nav shell (Map · Docs · Chat · Contribuer · Profil)
-└── features/
-    ├── auth/                 # login/register/splash → Node /api/auth, AuthBloc
-    ├── chat/                 # AI chat → FastAPI /chat, sources + metrics
-    ├── docs/                 # searchable/filterable documentation + detail (mock)
-    ├── contribution/         # validated suggestion form → FastAPI /contributions (auto-filter + moderation)
-    ├── map/                  # 58 tappable wilayas → Documentation pre-filtered
-    └── profile/              # signed-in user + logout
-```
-
-## Repository pattern
-
-Every backend interaction goes through a **repository interface** in `domain/repositories/`,
-implemented in `data/repositories/`. Implementations delegate to **datasources**
-(`*_remote_data_source.dart` for HTTP, `*_local_data_source.dart` for cache/mock). Swapping
-mock for real means changing a datasource/binding — no widget touches HTTP directly.
-
-| Feature | Today | Backend |
-|---|---|---|
-| Auth | **Live HTTP** | Node/Express `POST /api/auth/{login,register}` |
-| Chat | **Live HTTP** | FastAPI `POST /chat` `{chat_id, question}` → `{response, source_nodes[], metrics}` |
-| Documentation | **Mock** (`DummyData`, corpus-derived) | none yet — `DocsRemoteDataSource` is scaffolded |
-| Contribution | **Live HTTP** | FastAPI `POST /contributions` `{titre, categorie, region, contenu, source, contributor_name}` → `{accepted, status, message}` (auto-filter + moderation queue); accepted items are also cached locally |
-| Map / wilayas | **Static** list of 58 wilayas | none needed |
-
-## Pointing at a real backend
-
-Base URLs are centralized in `lib/core/constants/end_points.dart` and read from `.env`:
-
-```dotenv
-# .env  (copy from .env.example)
-AUTH_BASE_URL=http://10.0.2.2:3000   # Node/Express (cultini-backend)
-AI_BASE_URL=http://10.0.2.2:8000     # FastAPI (cultini_AI)
-```
-
-- `10.0.2.2` is the host machine from the **Android emulator**. Use `http://localhost` for the
-  iOS simulator / desktop, or your machine's LAN IP for a physical device.
-- The default `ApiClient` targets `AUTH_BASE_URL`; a second named instance (`instanceName: 'ai'`)
-  targets `AI_BASE_URL` and is injected into the chat datasource.
-- To enable a future Documentation endpoint: add its path to `EndPoints`, implement
-  `DocsRemoteDataSource.getEntries`, and have `DocsRepositoryImpl` prefer remote (online-first)
-  with the local mock as fallback.
-
-## Running
-
-```bash
-flutter pub get
-flutter run            # emulator / device   (use -d chrome for web)
-flutter analyze        # static analysis — currently clean
-```
-
-Auth, chat, and contribution require their backends running (start `cultini-backend` on :3000
-for auth and `cultini_AI` on :8000 for chat + contributions, then set the base URLs above).
-Map and Documentation work fully offline on mock data. The OSM basemap needs network to render
-tiles; wilaya markers are tappable regardless.
-
-> **Note:** `flutter test` cannot run while the project sits under a path containing an
-> apostrophe (`…/Github Repo's/…`) — Flutter's generated test listener embeds the path in a
-> single-quoted string and the apostrophe breaks it. The tests in `test/cultini_test.dart`
-> are valid (covered by `flutter analyze`) and pass once the project is in an apostrophe-free path.
