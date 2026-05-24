@@ -115,14 +115,18 @@ class _ChatViewState extends State<_ChatView> {
                           controller: _scrollCtrl,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 16),
-                          itemCount:
-                              state.messages.length + (state.isLoading ? 1 : 0),
+                          itemCount: state.messages.length,
                           itemBuilder: (context, index) {
-                            if (state.isLoading &&
-                                index == state.messages.length) {
+                            final message = state.messages[index];
+                            // The streaming AI placeholder is empty until the
+                            // first token lands — show the typing indicator in
+                            // its place rather than an empty bubble.
+                            if (!message.isUser &&
+                                message.text.isEmpty &&
+                                state.isLoading) {
                               return const _TypingIndicator();
                             }
-                            return MessageBubble(message: state.messages[index]);
+                            return MessageBubble(message: message);
                           },
                         ),
                   ),

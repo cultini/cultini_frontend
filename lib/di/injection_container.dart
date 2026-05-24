@@ -11,7 +11,7 @@ import '../features/chat/data/datasources/chat_remote_data_source.dart';
 import '../features/chat/data/repositories/chat_repository_impl.dart';
 import '../features/chat/domain/repositories/chat_repository.dart';
 import '../features/chat/domain/usecases/get_chat_history_usecase.dart';
-import '../features/chat/domain/usecases/send_chat_message_usecase.dart';
+import '../features/chat/domain/usecases/stream_chat_message_usecase.dart';
 import '../features/chat/presentation/bloc/chat_bloc.dart';
 
 import '../core/constants/end_points.dart';
@@ -93,13 +93,13 @@ Future<void> init() async {
 
   //! UseCases
   sl.registerLazySingleton(() => GetChatHistoryUseCase(sl<ChatRepository>()));
-  sl.registerLazySingleton(() => SendChatMessageUseCase(sl<ChatRepository>()));
+  sl.registerLazySingleton(() => StreamChatMessageUseCase(sl<ChatRepository>()));
 
   //! Cubits / Blocs
   sl.registerFactory(
     () => ChatBloc(
       getHistory: sl<GetChatHistoryUseCase>(),
-      sendMessage: sl<SendChatMessageUseCase>(),
+      streamMessage: sl<StreamChatMessageUseCase>(),
     ),
   );
 

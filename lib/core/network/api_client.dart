@@ -115,6 +115,32 @@ class ApiClient {
     }
   }
 
+  // ── POST that returns an SSE / chunked text stream (the chat endpoint) ─────
+  /// Opens a streaming POST and returns the response body decoded into lines.
+  /// Callers (e.g. the chat data source) parse `data:` SSE frames from these.
+  Future<Stream<String>> postStream(
+    String endpoint, {
+    Map<String, dynamic>? body,
+    bool requiresAuth = false,
+  }) async {
+    await checkConnection();
+    final request = http.Request('POST', Uri.parse('$baseUrl$endpoint'));
+    request.headers.addAll(
+      requiresAuth ? _headers : {'Content-Type': 'application/json'},
+    );
+    request.headers['Accept'] = 'text/event-stream';
+    if (body != null) request.body = jsonEncode(body);
+
+    final streamed = await _client.send(request);
+    if (streamed.statusCode < 200 || streamed.statusCode >= 300) {
+      // Drain to a buffered Response so the existing error mapping applies.
+      _handleResponse(await http.Response.fromStream(streamed));
+    }
+    return streamed.stream
+        .transform(utf8.decoder)
+        .transform(const LineSplitter());
+  }
+
   // ── New: POST multipart for face enrollment only ──────────────────────────
   Future<void> postMultipart(
     String endpoint, {

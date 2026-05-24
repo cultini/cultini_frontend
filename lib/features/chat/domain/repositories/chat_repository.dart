@@ -1,10 +1,13 @@
+import '../../data/datasources/chat_stream_event.dart';
 import '../entities/chat_message_entity.dart';
 
 abstract class ChatRepository {
   /// Cached conversation (local only — the backend has no bulk-history call here).
   Future<List<ChatMessageEntity>> getHistory();
 
-  /// Sends a question to the RAG backend and returns the AI answer (with its
-  /// sources + metrics). [chatId] is the backend-managed conversation id.
-  Future<ChatMessageEntity> sendMessage(String chatId, String text);
+  /// Streams the AI answer to a question as SSE events (meta / token / done).
+  /// [chatId] is the backend-managed conversation id. The completed turn
+  /// (question + assembled answer) is persisted to the local cache once the
+  /// stream ends successfully.
+  Stream<ChatStreamEvent> streamMessage(String chatId, String text);
 }

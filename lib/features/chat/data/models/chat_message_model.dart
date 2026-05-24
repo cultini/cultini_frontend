@@ -12,23 +12,6 @@ class ChatMessageModel extends ChatMessageEntity {
     super.metrics,
   });
 
-  /// Builds the AI message from a FastAPI `/chat` response:
-  /// `{ chat_id, response, source_nodes[], metrics, ... }`.
-  factory ChatMessageModel.fromChatResponse(Map<String, dynamic> json) {
-    final nodes = (json['source_nodes'] as List<dynamic>? ?? const [])
-        .map((e) => SourceModel.fromJson((e as Map).cast<String, dynamic>()))
-        .toList();
-    final metricsJson = (json['metrics'] as Map?)?.cast<String, dynamic>();
-    return ChatMessageModel(
-      id: 'ai_${DateTime.now().microsecondsSinceEpoch}',
-      text: (json['response'] as String?)?.trim() ?? '',
-      isUser: false,
-      timestamp: DateTime.now(),
-      sources: nodes,
-      metrics: metricsJson == null ? null : ChatMetricsModel.fromJson(metricsJson),
-    );
-  }
-
   /// For local cache round-trips.
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     final rawSources = json['sources'] as List<dynamic>?;
